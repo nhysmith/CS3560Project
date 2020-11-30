@@ -5,6 +5,7 @@ public class RestaurantMenuItem
     String itemName;
     String description;
     double price;
+    String restaurantID;
 
     RestaurantMenuItem(String itemName, String description, double price)
     {
