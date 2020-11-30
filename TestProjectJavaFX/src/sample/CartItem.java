@@ -5,7 +5,7 @@ public class CartItem {
     int quantity;
     double price;
     double totalPrice;
-
+    String menuItemID;
 
     CartItem(String itemName, int quantity, double price)
     {

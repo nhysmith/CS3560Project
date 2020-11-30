@@ -21,9 +21,6 @@ public class Main extends Application {
     Cart cart = new Cart();
     Button cartButton = new Button("Cart: " + cart.items.size());
 
-    //VBox menuItemVBox = new VBox(10);
-    //VBox restaurantVBox;
-
     VBox cartVBox = new VBox(10);
 
     //Dummy Restaurant Menu Arrays
@@ -280,6 +277,23 @@ public class Main extends Application {
         borderPane.setCenter(searchVBox);
     }
 
+    //
+    public HBox createRestaurantHBox(Restaurant restaurant)
+    {
+        Label rNameLabel = new Label(restaurant.name);
+        Button rNameButton = new Button(restaurant.name);
+
+        rNameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                createRestaurantPage(restaurant);
+            }
+        });
+        HBox hBox = new HBox(10, rNameLabel, rNameButton);
+        hBox.setAlignment(Pos.CENTER);
+        return hBox;
+    }
+
     //Add the specific restaurant info (the name, phone #, etc)
     public void createRestaurantPage(Restaurant restaurant)
     {
@@ -323,7 +337,7 @@ public class Main extends Application {
     {
         Label popularLabel = new Label("Popular Restaurants:");
 
-        Button r1Button = new Button(r1.name);
+       /* Button r1Button = new Button(r1.name);
         Button r2Button = new Button(r2.name);
         Button r3Button = new Button(r3.name);
 
@@ -367,9 +381,9 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 createRestaurantPage(r3);
             }
-        });
+        });*/
 
-        VBox restaurantVBox = new VBox(10, popularLabel, restaurantGP);
+        VBox restaurantVBox = new VBox(10, popularLabel, createRestaurantHBox(r1), createRestaurantHBox(r2), createRestaurantHBox(r3));
         restaurantVBox.setAlignment(Pos.CENTER);
 
         return restaurantVBox;
@@ -437,7 +451,7 @@ public class Main extends Application {
         cart.restaurant = restaurant;
     }
 
-    //Create the cart part when the cart is empty
+    //Create the cart page when the cart is empty
     public void createEmptyCartPage()
     {
         cartVBox.getChildren().clear();
@@ -448,7 +462,7 @@ public class Main extends Application {
         borderPane.setCenter(cartVBox);
     }
 
-    //Create the cart part when the cart is empty
+    //Create the cart page when the order has been completed
     public void createCompleteOrderPage()
     {
         cart = new Cart();
@@ -496,7 +510,7 @@ public class Main extends Application {
         //Add each menu item to the VBox
         for (CartItem item : cart.items)
         {
-            cartItemVBox.getChildren().add(setCartItem(item));
+            cartItemVBox.getChildren().add(createCartItemHBox(item));
         }
 
         cartVBox.getChildren().addAll( numItemsLabel, restaurantInfoVBox, orderLabel, cartItemVBox, totalLabel, checkoutButton);
@@ -514,7 +528,7 @@ public class Main extends Application {
     }
 
     //Create HBox for each cart item
-    public HBox setCartItem(CartItem cartItem)
+    public HBox createCartItemHBox(CartItem cartItem)
     {
         Label itemNameLabel = new Label(cartItem.itemName);
         Label itemQuantityLabel = new Label("x" + String.valueOf(cartItem.quantity));

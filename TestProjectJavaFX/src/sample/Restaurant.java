@@ -6,6 +6,7 @@ public class Restaurant
     String address;
     String phoneNumber;
     RestaurantMenuItem[] items;
+    String restaurantID;
 
     Restaurant(String name, String address, String phoneNumber, RestaurantMenuItem[] items)
     {
