@@ -163,7 +163,9 @@ public class Main extends Application {
     {
         if ((!email.isEmpty()) && (!password.isEmpty()))
         {
-            //validateEmail();
+            //============================================
+            //This is where authentication needs to happen
+            //============================================
             emailErrorLabel.setVisible(false);
             passwordErrorLabel.setVisible(false);
             return true;
@@ -190,7 +192,7 @@ public class Main extends Application {
         }
     }
 
-    //Creates a homepage with search bar
+    //Creates a homepage with search bar and a popular restaurants section
     public void createHomePage()
     {
         VBox homeVBox = new VBox(10, createSearchBar(), createPopularRestaurantVBox());
@@ -198,7 +200,7 @@ public class Main extends Application {
         borderPane.setCenter(homeVBox);
     }
 
-    //Creates a profile page
+    //Creates a profile page where user info is stored and orders are displayed
     public void createProfilePage()
     {
         Label emailProfileLabel = new Label("Email: ");
@@ -212,6 +214,9 @@ public class Main extends Application {
         Label lastFourData = new Label("0000");
 
         Label ordersLabel = new Label("Your Orders: ");
+        //==============================================
+        //How are we handling orders after checkout?
+        //==============================================
 
         GridPane profileGP = new GridPane();
         profileGP.setAlignment(Pos.CENTER);
@@ -252,6 +257,9 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 if(!searchText.getText().isEmpty())
                 {
+                    //========================
+                    //searchText.getText() needs to be queried
+                    //========================
                     createSearchPage();
                     searchErrorLabel.setVisible(false);
                 }
@@ -271,13 +279,20 @@ public class Main extends Application {
     //Create the search page after the search button is pressed
     public void createSearchPage()
     {
+        //=========================================
+        //Probably needs a search results parameter
+        //=========================================
         VBox searchVBox = new VBox(10,createSearchBar(), createPopularRestaurantVBox());
         searchVBox.setAlignment(Pos.CENTER);
+
+        //=============================
+        //For each search result createRestaurantHBox
+        //==============================
 
         borderPane.setCenter(searchVBox);
     }
 
-    //
+    //Creates a label w/ the restaurant's name and a button that leads to that restaurant's page/menu
     public HBox createRestaurantHBox(Restaurant restaurant)
     {
         Label rNameLabel = new Label(restaurant.name);
@@ -294,7 +309,7 @@ public class Main extends Application {
         return hBox;
     }
 
-    //Add the specific restaurant info (the name, phone #, etc)
+    //Creates a Restaurant Page that lists restaurant's info and menu
     public void createRestaurantPage(Restaurant restaurant)
     {
         //Set restaurant name, address, phone number
@@ -419,6 +434,7 @@ public class Main extends Application {
         return menuItemHBox;
     }
 
+    //Adds items to cart's arraylist of restaurant menu items, updates number of items and total
     void addItemToCart(int numItems, Restaurant restaurant, RestaurantMenuItem rmi)
     {
         setCartRestaurant(restaurant);
@@ -426,13 +442,13 @@ public class Main extends Application {
         cart.numItems += numItems;
         cartButton.setText("Cart: " + cart.numItems);
 
-        //CartItem(String itemName, int quantity, double price)
         CartItem newItem = new CartItem(rmi.itemName, numItems, rmi.price);
-        //System.out.println("Add item to arraylist");
+
         cart.items.add(newItem);
         cart.totalDue += newItem.totalPrice;
     }
 
+    //This ensures that the user can only place an order from one restaurant at a time
     void setCartRestaurant(Restaurant restaurant)
     {
         //If there is something in the cart clear it
@@ -788,6 +804,7 @@ public class Main extends Application {
             {
                 orderButton.setDisable(true);
             }
+            //cvv must be 3 digits
             else if(newValue.matches("\\d\\d\\d"))
             {
                 orderButton.setDisable(false);
@@ -803,7 +820,9 @@ public class Main extends Application {
         orderButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //Order need to be added to profile
+                //==================================
+                //Order needs to be added to profile
+                //=================================
                 createCompleteOrderPage();
                 itemStage.close();
             }
