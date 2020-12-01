@@ -13,4 +13,12 @@ public class RestaurantMenuItem
         this.description = description;
         this.price = price;
     }
+    
+    RestaurantMenuItem(String itemName, String description, double price, String restaurantID)
+    {
+        this.itemName = itemName;
+        this.description = description;
+        this.price = price;
+        this.restaurantID = restaurantID;
+    }
 }
