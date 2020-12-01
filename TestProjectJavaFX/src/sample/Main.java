@@ -23,7 +23,7 @@ public class Main extends Application {
 
     VBox cartVBox = new VBox(10);
 
-    //Label nameLabel = new Label("Welcome to GrubDash");
+    Label nameLabel = new Label("Welcome to GrubDash");
 
     //Dummy Restaurant Menu Arrays
     RestaurantMenuItem[] r1Items = {new RestaurantMenuItem("Cheeseburger", "A hamburger w/ cheese", 4.99),
@@ -54,10 +54,11 @@ public class Main extends Application {
 
         //navBar HBox
         HBox navBar = new HBox(30, homeButton, accountButton,cartButton);
+
         navBar.setAlignment(Pos.CENTER);
 
         //Initially false so that users have to login first
-        navBar.setVisible(false);
+        //navBar.setVisible(false);
 
         //Login
         Label emailLabel = new Label("Email: ");
@@ -97,7 +98,10 @@ public class Main extends Application {
         //Cart VBox
         cartVBox.setAlignment(Pos.CENTER);
 
-        borderPane.setTop(navBar);
+        VBox labelVBox = new VBox(nameLabel);
+        labelVBox.setAlignment(Pos.CENTER);
+
+        borderPane.setTop(labelVBox);
         borderPane.setBottom(spacerLabel);
 
         //starting screen: User has to login before going to the homepage
@@ -115,7 +119,8 @@ public class Main extends Application {
                 String password = passwordText.getText();
 
                 if(validateLogin(email, password, error1Label, error2Label)) {
-                    navBar.setVisible(true);
+                    borderPane.setTop(navBar);
+                    //navBar.setVisible(true);
                    createHomePage();
                 }
             }
