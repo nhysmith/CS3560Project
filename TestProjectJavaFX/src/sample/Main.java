@@ -23,6 +23,8 @@ public class Main extends Application {
 
     VBox cartVBox = new VBox(10);
 
+    //Label nameLabel = new Label("Welcome to GrubDash");
+
     //Dummy Restaurant Menu Arrays
     RestaurantMenuItem[] r1Items = {new RestaurantMenuItem("Cheeseburger", "A hamburger w/ cheese", 4.99),
             new RestaurantMenuItem("Hamburger", "A hamburger w/ lettuce and tomato", 3.99),
@@ -49,7 +51,6 @@ public class Main extends Application {
         //navBar elements
         Button accountButton = new Button("Account");
         Button homeButton = new Button("GrubDash");
-        //Label name = new Label("GrubDash");
 
         //navBar HBox
         HBox navBar = new HBox(30, homeButton, accountButton,cartButton);
@@ -272,7 +273,7 @@ public class Main extends Application {
 
         VBox vBox = new VBox(10,hBox,searchErrorLabel);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setTranslateY(-90);
+        vBox.setTranslateY(-75);
         return vBox;
     }
 
@@ -282,7 +283,10 @@ public class Main extends Application {
         //=========================================
         //Probably needs a search results parameter
         //=========================================
-        VBox searchVBox = new VBox(10,createSearchBar(), createPopularRestaurantVBox());
+        //VBox searchVBox = new VBox(10,createSearchBar(), createPopularRestaurantVBox());
+
+        //An example of what a search result will look like
+        VBox searchVBox = new VBox(10,createSearchBar(), createRestaurantHBox(r1), createPopularRestaurantVBox());
         searchVBox.setAlignment(Pos.CENTER);
 
         //=============================
@@ -296,7 +300,7 @@ public class Main extends Application {
     public HBox createRestaurantHBox(Restaurant restaurant)
     {
         Label rNameLabel = new Label(restaurant.name);
-        Button rNameButton = new Button(restaurant.name);
+        Button rNameButton = new Button("View Menu");
 
         rNameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -352,9 +356,9 @@ public class Main extends Application {
     {
         Label popularLabel = new Label("Popular Restaurants:");
 
-       /* Button r1Button = new Button(r1.name);
-        Button r2Button = new Button(r2.name);
-        Button r3Button = new Button(r3.name);
+        Button r1Button = new Button("View Menu");
+        Button r2Button = new Button("View Menu");
+        Button r3Button = new Button("View Menu");
 
         Label r1Label = new Label(r1.name);
         Label r2Label = new Label(r2.name);
@@ -377,8 +381,6 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 createRestaurantPage(r1);
-                //borderPane.getCenter().setTranslateY(-75);
-
             }
         });
 
@@ -396,9 +398,10 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 createRestaurantPage(r3);
             }
-        });*/
+        });
 
-        VBox restaurantVBox = new VBox(10, popularLabel, createRestaurantHBox(r1), createRestaurantHBox(r2), createRestaurantHBox(r3));
+        //VBox restaurantVBox = new VBox(10, popularLabel, createRestaurantHBox(r1), createRestaurantHBox(r2), createRestaurantHBox(r3));
+        VBox restaurantVBox = new VBox(10, popularLabel, restaurantGP);
         restaurantVBox.setAlignment(Pos.CENTER);
 
         return restaurantVBox;
@@ -548,7 +551,8 @@ public class Main extends Application {
     {
         Label itemNameLabel = new Label(cartItem.itemName);
         Label itemQuantityLabel = new Label("x" + String.valueOf(cartItem.quantity));
-        Label itemPriceLabel = new Label("$" + String.format("%.2f", cartItem.price));
+        Label itemPriceLabel = new Label("($" + String.format("%.2f", cartItem.price) + ")");
+        Label itemTotalPriceLabel = new Label("$" + String.valueOf(cartItem.totalPrice));
 
         Button editItemButton = new Button("Edit");
         Button deleteItemButton = new Button("Delete");
@@ -571,7 +575,7 @@ public class Main extends Application {
         });
 
         //Menu Item HBox
-        HBox cartItemHBox = new HBox(10, itemNameLabel, itemQuantityLabel, itemPriceLabel, editItemButton, deleteItemButton);
+        HBox cartItemHBox = new HBox(10, itemNameLabel, itemQuantityLabel, itemPriceLabel, itemTotalPriceLabel, editItemButton, deleteItemButton);
         cartItemHBox.setAlignment(Pos.CENTER);
 
         return cartItemHBox;
