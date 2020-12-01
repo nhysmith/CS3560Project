@@ -57,9 +57,6 @@ public class Main extends Application {
 
         navBar.setAlignment(Pos.CENTER);
 
-        //Initially false so that users have to login first
-        //navBar.setVisible(false);
-
         //Login
         Label emailLabel = new Label("Email: ");
         Label passwordLabel = new Label("Password: ");
@@ -797,6 +794,8 @@ public class Main extends Application {
     {
         Stage itemStage = new Stage();
 
+        Label customerNameLabel = new Label("Name: ");
+        Label creditCardLabel = new Label("Credit Card: ");
         Label totalLabel = new Label("Your total is: $" + cart.totalDue);
         Label cvvLabel = new Label("CVV: ");
         TextField cvvText = new TextField();
@@ -837,7 +836,7 @@ public class Main extends Application {
             }
         });
 
-        VBox checkoutVBox = new VBox(10, totalLabel, cvvHBox, orderButton);
+        VBox checkoutVBox = new VBox(10, customerNameLabel, creditCardLabel, totalLabel, cvvHBox, orderButton);
         checkoutVBox.setAlignment(Pos.CENTER);
         Scene itemScene = new Scene(checkoutVBox, 350, 300);
 
