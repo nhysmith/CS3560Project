@@ -13,12 +13,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import backend //Our own. We need to put this somewhere where it sees our backend package.
+import DaeYoungsBackEnd.Customer //Our own. We need to put this somewhere where it sees our backend package.
 
 public class Main extends Application {
-    Customer currentCustomer = new Customer();
-    AccessConnection c = new AccessConnection(
     
+    Customer currentCustomer = new Customer();
+    AccessConnection ac = new AccessConnection();
+    Connection c = null;
+    c = ac.getCurrentConnection();
+        
     //BorderPane
     BorderPane borderPane = new BorderPane();
 
@@ -53,6 +56,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        
         //navBar elements
         Button accountButton = new Button("Account");
         Button homeButton = new Button("GrubDash");
