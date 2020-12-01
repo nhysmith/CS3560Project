@@ -18,7 +18,8 @@ import javafx.stage.Stage;
 import DaeYoungsBackEnd.Customer;
 import DaeYoungsBackEnd.ShoppingCart;
 import DaeYoungsBackEnd.Menu;
-import DaeYoungsBcakEnd.Item;
+import DaeYoungsBackEnd.Item;
+import DaeYoungsBackEnd.Driver;
 
 public class Main extends Application {
     
@@ -26,6 +27,7 @@ public class Main extends Application {
     Customer currentCustomer = new Customer();
     ShoppingCart currentCart = new ShoppingCart();
     Menu currentMenu = new Menu();
+    Driver currentDriver = new Driver();
     
     
     AccessConnection ac = new AccessConnection();
@@ -361,7 +363,7 @@ public class Main extends Application {
         
         for(Item j : currentItems)
         {
-            RestaurantMenuItem newItem = new RestaurantMenuItem(j.getItemName(),j.getItemDescription(),j.getItemPrice(),restaurant.restaurantID);
+            RestaurantMenuItem newItem = new RestaurantMenuItem(j.getItemName(),j.getItemDescription(),j.getItemPrice(),restaurant.restaurantID,j.getItemID);
             currentMenuItems.add(newItem);
         }
         
@@ -491,10 +493,12 @@ public class Main extends Application {
         cart.numItems += numItems;
         cartButton.setText("Cart: " + cart.numItems);
 
-        CartItem newItem = new CartItem(rmi.itemName, numItems, rmi.price);
-        
-        
-        cart.items.add(newItem);
+        CartItem newItem = new CartItem(rmi.itemName, numItems, rmi.price,rmi.itemID);
+        for(x=0;x<numItems;x++)
+        {    
+            currentCart.addToCart(c,currentCart.getCartID(),rmi.itemID) //This doesn't have quantity, so we add each one individually
+        }
+        cart.items.add(newItem);    
         cart.totalDue += newItem.totalPrice;
     }
 
@@ -536,7 +540,8 @@ public class Main extends Application {
         cartButton.setText("Cart: " + cart.numItems);
         cartVBox.getChildren().clear();
 
-        Label driverLabel = new Label("Your driver is Driver");
+        currentDriver.getDriver(c)
+        Label driverLabel = new Label("Your driver is driving a " + currentDriver.getCarModel() + " with the license plate " + currentDriver.getLicensePlate()); //This now randomly takes a driver
 
         cartVBox.getChildren().add(driverLabel);
     }
@@ -590,6 +595,10 @@ public class Main extends Application {
     {
         cart.numItems -= cartItem.quantity;
         cart.totalDue -= cartItem.totalPrice;
+        for(x=0;x<cartItem.quantity;x++)
+        {
+            currentCart.removeFromCart(c,currentCart.getCartID,cartItem.itemID)
+        }
         cart.items.remove(cartItem);
         cartButton.setText("Cart: " + cart.numItems);
     }
