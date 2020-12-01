@@ -15,7 +15,7 @@ public class CartItem {
         this.totalPrice = quantity*price;
     }
 
-        CartItem(String itemName, int quantity, double price, int itemID)
+    CartItem(String itemName, int quantity, double price, int itemID)
     {
         this.itemName = itemName;
         this.quantity = quantity;
