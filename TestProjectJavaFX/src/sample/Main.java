@@ -13,7 +13,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import backend //Our own. We need to put this somewhere where it sees our backend package.
+
 public class Main extends Application {
+    Customer currentCustomer = new Customer();
+    AccessConnection c = new AccessConnection(
+    
     //BorderPane
     BorderPane borderPane = new BorderPane();
 
@@ -168,10 +173,22 @@ public class Main extends Application {
         {
             //============================================
             //This is where authentication needs to happen
+            if(currentCustomer.customerAuthentication(c,email,password))
+            {
+                emailErrorLabel.setVisible(false);
+                passwordErrorLabel.setVisible(false);
+                return true;
+                
+            }
+            else
+            {
+                emailErrorLabel.setVisible(true);
+                passwordErrorLabel.setVisible(true);
+                return false;
+            }
+                
             //============================================
-            emailErrorLabel.setVisible(false);
-            passwordErrorLabel.setVisible(false);
-            return true;
+            
         }
 
         else if ((email.isEmpty()) && (!password.isEmpty()))
@@ -211,10 +228,10 @@ public class Main extends Application {
         Label phoneLabel = new Label("Phone #:");
         Label lastFourLabel = new Label("Credit Card(Last 4):");
 
-        Label emailProfileData = new Label("email@example.com");
-        Label addressData = new Label("1234 Address Street");
-        Label phoneData = new Label("1-800-000-0000");
-        Label lastFourData = new Label("0000");
+        Label emailProfileData = new Label(currentCustomer.getCustomerEmail());
+        Label addressData = new Label(currentCustomer.getDeliveryAddress());
+        Label phoneData = new Label(currentCustomer.getPhoneNum());
+        Label lastFourData = new Label("0000"); //TODO: Change this to represent last 4 numbers
 
         Label ordersLabel = new Label("Your Orders: ");
         //==============================================
