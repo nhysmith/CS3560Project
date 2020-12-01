@@ -177,10 +177,6 @@ public class Main extends Application {
             {
                 emailErrorLabel.setVisible(false);
                 passwordErrorLabel.setVisible(false);
-                currentCustomer.setCustomerEmail(email);
-                currentCustomer.setCustomerPassword(password); //TODO: Replace with setters/getters of the gotten customerID object
-                //More setters here
-                
                 return true;
                 
             }
