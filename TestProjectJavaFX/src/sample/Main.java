@@ -13,11 +13,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import DaeYoungsBackEnd.Customer //Our own. We need to put this somewhere where it sees our backend package.
+
+//Backend Imports
+import DaeYoungsBackEnd.Customer;
+import DaeYoungsBackEnd.ShoppingCart;
+import DaeYoungsBackEnd.Menu;
+import DaeYoungsBcakEnd.Item;
 
 public class Main extends Application {
     
+    //These items get replaced later
     Customer currentCustomer = new Customer();
+    ShoppingCart currentCart = new ShoppingCart();
+    Menu currentMenu = new Menu();
+    
+    
     AccessConnection ac = new AccessConnection();
     Connection c = null;
     c = ac.getCurrentConnection();
@@ -181,6 +191,7 @@ public class Main extends Application {
             {
                 emailErrorLabel.setVisible(false);
                 passwordErrorLabel.setVisible(false);
+                currentCart.createCart(c,currentCustomer.getCustomerID())
                 return true;
                 
             }
@@ -343,7 +354,19 @@ public class Main extends Application {
         Label restaurantName = new Label(restaurant.name);
         Label restaurantAddress = new Label(restaurant.address);
         Label restaurantPhoneNumber = new Label(restaurant.phoneNumber);
-
+        
+        ArrayList <RestaurantMenuItem> currentMenuItems = new ArrayList<RestaurantMenuItem>();
+        ArrayList <Item> currentItems = new ArrayList<Item>();
+        currentItems = currentMenu.getMenuItem(c,restaurant.restaurantID);
+        
+        for(Item j : currentItems)
+        {
+            RestaurantMenuItem newItem = new RestaurantMenuItem(j.getItemName(),j.getItemDescription(),j.getItemPrice(),restaurant.restaurantID);
+            currentMenuItems.add(newItem);
+        }
+        
+        restaurant.items = currentMenuItems.toArray();
+        
         Label menuLabel = new Label("Menu: ");
 
         VBox menuItemVBox = new VBox(10);
