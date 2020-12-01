@@ -492,7 +492,8 @@ public class Main extends Application {
         cartButton.setText("Cart: " + cart.numItems);
 
         CartItem newItem = new CartItem(rmi.itemName, numItems, rmi.price);
-
+        
+        
         cart.items.add(newItem);
         cart.totalDue += newItem.totalPrice;
     }
@@ -505,6 +506,7 @@ public class Main extends Application {
         {
             if(!cart.restaurant.equals(restaurant))
             {
+                currentCart.emptyCart(c,currentCart.getCartID());
                 cart.items.clear();
                 cart.numItems = 0;
                 cart.totalDue = 0.0;
