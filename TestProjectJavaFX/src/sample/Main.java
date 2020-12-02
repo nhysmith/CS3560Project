@@ -691,11 +691,13 @@ public class Main extends Application {
         signUpLabel.setId("nameLabel");
 
         //Page 1
+        Label nameLabel = new Label("Name: ");
         Label emailLabel = new Label("Email: ");
         Label passwordLabel = new Label("Password: ");
         Label phoneLabel = new Label("Phone#: ");
         Label addressLabel = new Label("Address: ");
 
+        Label error0Label = new Label("Required field!");
         Label error1Label = new Label("Required field!");
         Label error2Label = new Label("Required field!");
         Label error3Label = new Label("Required field!");
@@ -721,7 +723,7 @@ public class Main extends Application {
         Label error11Label = new Label("Required field!");
         Label error12Label = new Label("Required field!");
 
-        Label[] labels1 = new Label[]{error1Label, error2Label, error3Label, error4Label};
+        Label[] labels1 = new Label[]{error0Label, error1Label, error2Label, error3Label, error4Label};
 
         Label[] labels2 = new Label[]{error5Label, error6Label, error7Label, error8Label, error9Label, error10Label, error11Label, error12Label};
 
@@ -737,6 +739,7 @@ public class Main extends Application {
             label.setId("errorLabel");
         }
 
+        TextField nameText = new TextField();
         TextField emailText = new TextField();
         PasswordField passwordText = new PasswordField();
         TextField phoneText = new TextField();
@@ -758,21 +761,25 @@ public class Main extends Application {
         signUpGP.setHgap(10);
         signUpGP.setVgap(10);
 
-        signUpGP.add(emailLabel, 0, 0);
-        signUpGP.add(emailText, 1, 0);
-        signUpGP.add(error1Label, 2, 0);
+        signUpGP.add(nameLabel, 0, 0);
+        signUpGP.add(nameText, 1, 0);
+        signUpGP.add(error0Label, 2, 0);
 
-        signUpGP.add(passwordLabel, 0, 1);
-        signUpGP.add(passwordText, 1, 1);
-        signUpGP.add(error2Label, 2, 1);
+        signUpGP.add(emailLabel, 0, 1);
+        signUpGP.add(emailText, 1, 1);
+        signUpGP.add(error1Label, 2, 1);
 
-        signUpGP.add(phoneLabel, 0, 2);
-        signUpGP.add(phoneText, 1, 2);
-        signUpGP.add(error3Label, 2, 2);
+        signUpGP.add(passwordLabel, 0, 2);
+        signUpGP.add(passwordText, 1, 2);
+        signUpGP.add(error2Label, 2, 2);
 
-        signUpGP.add(addressLabel, 0, 3);
-        signUpGP.add(addressText, 1, 3);
-        signUpGP.add(error4Label, 2, 3);
+        signUpGP.add(phoneLabel, 0, 3);
+        signUpGP.add(phoneText, 1, 3);
+        signUpGP.add(error3Label, 2, 3);
+
+        signUpGP.add(addressLabel, 0, 4);
+        signUpGP.add(addressText, 1, 4);
+        signUpGP.add(error4Label, 2, 4);
 
         GridPane cardInfoGP = new GridPane();
         cardInfoGP.setAlignment(Pos.CENTER);
@@ -834,7 +841,7 @@ public class Main extends Application {
         continueButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                String[] data = new String[]{emailText.getText(), passwordText.getText(), phoneText.getText(), addressText.getText()};
+                String[] data = new String[]{nameText.getText(), emailText.getText(), passwordText.getText(), phoneText.getText(), addressText.getText()};
                 if(validateForm(data, labels1)) {
                     signUpVBox.getChildren().clear();
                     signUpVBox.getChildren().addAll(cardInfoGP, submitButton);
