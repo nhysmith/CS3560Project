@@ -46,6 +46,7 @@ public class Main extends Application {
     Restaurant r1 = new Restaurant("Bob's Burgers", "1234 Main Street", "18001234567", r1Items);
     Restaurant r2 = new Restaurant("On a Roll Sushi", "1234 First Ave", "18001234568", r2Items);
     Restaurant r3 = new Restaurant("Take a Pizza My Heart", "1234 Central Blvd", "18001234569", r3Items);
+    Restaurant[] restaurants = new Restaurant[]{r1, r2, r3};
 
     //Dummy User
     User user = new User("user1234", "101 Binary Ln", "1234567");
@@ -346,7 +347,7 @@ public class Main extends Application {
 
         VBox vBox = new VBox(10,hBox,searchErrorLabel);
         vBox.setAlignment(Pos.CENTER);
-        vBox.setTranslateY(-75);
+        vBox.setTranslateY(-25);
         return vBox;
     }
 
@@ -358,9 +359,18 @@ public class Main extends Application {
         //=========================================
         //VBox searchVBox = new VBox(10,createSearchBar(), createPopularRestaurantVBox());
 
-        //An example of what a search result will look like
-        VBox searchVBox = new VBox(10,createSearchBar(), createRestaurantHBox(r1), createPopularRestaurantVBox());
+
+
+        VBox searchVBox = new VBox(10,createSearchBar());
         searchVBox.setAlignment(Pos.CENTER);
+
+        //An example of what a search result will look like
+        for (Restaurant r: restaurants)
+        {
+            searchVBox.getChildren().add(createRestaurantHBox(r));
+        }
+
+        searchVBox.getChildren().add(createPopularRestaurantVBox());
 
         //=============================
         //For each search result createRestaurantHBox
