@@ -978,6 +978,7 @@ public class Main extends Application {
         final int[] tempQuantity = {cartItem.quantity};
         Stage editItemStage = new Stage();
         Label itemNameLabelPopUp = new Label(cartItem.itemName);
+        itemNameLabelPopUp.setId("itemName");
         Label totalItemPriceLabel = new Label("$" + String.format("%.2f", cartItem.totalPrice));
         Label quantityLabel = new Label("Quantity: ");
 
