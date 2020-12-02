@@ -17,11 +17,15 @@ public class Main extends Application {
     //BorderPane
     BorderPane borderPane = new BorderPane();
 
-    //Cart elements
+    //Cart
     Cart cart = new Cart();
-    Button cartButton = new Button("Cart: " + cart.items.size());
-
     VBox cartVBox = new VBox(10);
+
+    //Nav Bar Buttons
+    Button cartButton = new Button("Cart: " + cart.items.size());
+    Button accountButton = new Button("Account");
+    Button homeButton = new Button("GrubDash");
+    Button signOutButton = new Button("Sign Out");
 
     Label nameLabel = new Label("Welcome to GrubDash");
 
@@ -48,45 +52,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //navBar elements
-        Button accountButton = new Button("Account");
-        Button homeButton = new Button("GrubDash");
-
-        //navBar HBox
-        HBox navBar = new HBox(30, homeButton, accountButton,cartButton);
-
-        navBar.setAlignment(Pos.CENTER);
-
-        //Login
-        Label emailLabel = new Label("Email: ");
-        Label passwordLabel = new Label("Password: ");
-        Label error1Label = new Label("Email is required!");
-        Label error2Label = new Label("Password is required!");
-        error1Label.setVisible(false);
-        error2Label.setVisible(false);
-
-        TextField emailText = new TextField();
-        PasswordField passwordText = new PasswordField();
-
-        Button signInButton = new Button("Sign in");
-
-        //Login GridPane
-        GridPane loginGP = new GridPane();
-        loginGP.setAlignment(Pos.CENTER);
-        loginGP.setHgap(10);
-        loginGP.setVgap(10);
-
-        loginGP.add(emailLabel, 0, 0);
-        loginGP.add(emailText, 1, 0);
-        loginGP.add(error1Label, 0, 1);
-
-        loginGP.add(passwordLabel, 0, 2);
-        loginGP.add(passwordText, 1, 2);
-        loginGP.add(error2Label, 0, 3);
-
-        //Login VBox
-        VBox loginVBox = new VBox(10, loginGP, signInButton);
-        loginVBox.setAlignment(Pos.CENTER);
+        //nameLabel styling
+        nameLabel.setId("nameLabel");
 
         //Spacer Label
         Label spacerLabel = new Label(" ");
@@ -97,31 +64,18 @@ public class Main extends Application {
 
         VBox labelVBox = new VBox(nameLabel);
         labelVBox.setAlignment(Pos.CENTER);
+        labelVBox.setId("labelVBox");
 
         borderPane.setTop(labelVBox);
         borderPane.setBottom(spacerLabel);
 
         //starting screen: User has to login before going to the homepage
-        borderPane.setCenter(loginVBox);
+        //borderPane.setCenter(loginVBox);
+        createSignInPage();
 
         //============================================================================================
         //Button Controls
         //============================================================================================
-
-        //Sign in Button
-        signInButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String email = emailText.getText();
-                String password = passwordText.getText();
-
-                if(validateLogin(email, password, error1Label, error2Label)) {
-                    borderPane.setTop(navBar);
-                    //navBar.setVisible(true);
-                   createHomePage();
-                }
-            }
-        });
 
         //GrubDash Button: Takes User to the main page
         homeButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -147,9 +101,21 @@ public class Main extends Application {
             }
         });
 
-        //Scene home = new Scene(restaurantBP, 300, 275);
+        //Sign out : Take User to the sign in page
+        signOutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                clearCart();
+                borderPane.setTop(labelVBox);
+                createSignInPage();
+            }
+        });
+
+
+        Scene homeScene = new Scene(borderPane, 500, 475);
+        homeScene.getStylesheets().add("style.css");
         primaryStage.setTitle("GrubDash");
-        primaryStage.setScene(new Scene(borderPane, 500, 475));
+        primaryStage.setScene(homeScene);
         primaryStage.show();
     }
 
@@ -160,6 +126,30 @@ public class Main extends Application {
     //============================================================================================
     //Methods
     //============================================================================================
+
+    //
+    boolean validateForm(String[] data, Label[] labels)
+    {
+        /*if(data.length != labels.length)
+        {
+            System.out.println("Error");
+            //return false;
+        }*/
+        boolean isFormValid = true;
+        for (int i = 0; i < data.length; i++)
+        {
+            if(data[i].isEmpty())
+            {
+                isFormValid = false;
+                labels[i].setVisible(true);
+            }
+            else
+            {
+                labels[i].setVisible(false);
+            }
+        }
+        return isFormValid;
+    }
 
     //Returns true if both the username and password have data
     boolean validateLogin(String email, String password, Label emailErrorLabel, Label passwordErrorLabel)
@@ -193,6 +183,86 @@ public class Main extends Application {
             passwordErrorLabel.setVisible(true);
             return false;
         }
+    }
+
+    //Create NavBar
+    public HBox createNavBar()
+    {
+        HBox navBar = new HBox(30, homeButton, accountButton,cartButton, signOutButton);
+
+        cartButton.setId("navButton");
+        accountButton.setId("navButton");
+        homeButton.setId("navButton");
+        signOutButton.setId("navButton");
+        navBar.setId("navBar");
+
+        navBar.setAlignment(Pos.CENTER);
+
+        return navBar;
+
+    }
+
+    //Create Sign In Page
+    public void createSignInPage()
+    {
+        Label emailLabel = new Label("Email: ");
+        Label passwordLabel = new Label("Password: ");
+        Label error1Label = new Label("Required field!");
+        Label error2Label = new Label("Required field!");
+        error1Label.setVisible(false);
+        error1Label.setId("errorLabel");
+        error2Label.setVisible(false);
+        error2Label.setId("errorLabel");
+
+        TextField emailText = new TextField();
+        PasswordField passwordText = new PasswordField();
+
+        Button signUpButton = new Button("Sign Up");
+        Button signInButton = new Button("Sign In");
+
+        signUpButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                createSignUpPopup();
+            }
+        });
+
+        signInButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String email = emailText.getText();
+                String password = passwordText.getText();
+
+                if(validateLogin(email, password, error1Label, error2Label)) {
+                    borderPane.setTop(createNavBar());
+                    createHomePage();
+                }
+            }
+        });
+
+        HBox buttonHBox = new HBox(10, signUpButton, signInButton);
+        buttonHBox.setAlignment(Pos.CENTER);
+        buttonHBox.setTranslateX(-12);
+
+        //Login GridPane
+        GridPane loginGP = new GridPane();
+        loginGP.setAlignment(Pos.CENTER);
+        loginGP.setHgap(10);
+        loginGP.setVgap(10);
+
+        loginGP.add(emailLabel, 0, 0);
+        loginGP.add(emailText, 1, 0);
+        loginGP.add(error1Label, 2, 0);
+
+        loginGP.add(passwordLabel, 0, 1);
+        loginGP.add(passwordText, 1, 1);
+        loginGP.add(error2Label, 2, 1);
+
+        //Login VBox
+        VBox signInVBox = new VBox(10, loginGP, buttonHBox);
+        signInVBox.setAlignment(Pos.CENTER);
+
+        borderPane.setCenter(signInVBox);
     }
 
     //Creates a homepage with search bar and a popular restaurants section
@@ -248,8 +318,9 @@ public class Main extends Application {
     {
         TextField searchText = new TextField();
         Button searchButton = new Button("Search");
-        Label searchErrorLabel = new Label("Must contain text");
+        Label searchErrorLabel = new Label("Search field can't be blank");
         searchErrorLabel.setVisible(false);
+        searchErrorLabel.setId("errorLabel");
 
         HBox hBox = new HBox(10, searchText, searchButton);
         hBox.setAlignment(Pos.CENTER);
@@ -302,7 +373,8 @@ public class Main extends Application {
     public HBox createRestaurantHBox(Restaurant restaurant)
     {
         Label rNameLabel = new Label(restaurant.name);
-        Button rNameButton = new Button("View Menu");
+        rNameLabel.setId("searchResult");
+        Button rNameButton = new Button("Menu");
 
         rNameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -320,6 +392,7 @@ public class Main extends Application {
     {
         //Set restaurant name, address, phone number
         Label restaurantName = new Label(restaurant.name);
+        restaurantName.setId("rName");
         Label restaurantAddress = new Label(restaurant.address);
         Label restaurantPhoneNumber = new Label(restaurant.phoneNumber);
 
@@ -357,14 +430,18 @@ public class Main extends Application {
     public VBox createPopularRestaurantVBox()
     {
         Label popularLabel = new Label("Popular Restaurants:");
+        popularLabel.setId("titleLabel");
 
-        Button r1Button = new Button("View Menu");
-        Button r2Button = new Button("View Menu");
-        Button r3Button = new Button("View Menu");
+        Button r1Button = new Button("Menu");
+        Button r2Button = new Button("Menu");
+        Button r3Button = new Button("Menu");
 
         Label r1Label = new Label(r1.name);
+        r1Label.setId("popRest");
         Label r2Label = new Label(r2.name);
+        r2Label.setId("popRest");
         Label r3Label = new Label(r3.name);
+        r3Label.setId("popRest");
 
         GridPane restaurantGP = new GridPane();
         restaurantGP.setAlignment(Pos.CENTER);
@@ -420,9 +497,11 @@ public class Main extends Application {
     public HBox addMenuItem(Restaurant restaurant, RestaurantMenuItem rmi)
     {
         Label itemNameLabel = new Label(rmi.itemName);
+        itemNameLabel.setId("itemName");
         Label itemPriceLabel = new Label("$" + String.format("%.2f", rmi.price));
 
         Button viewItemButton = new Button("View");
+        viewItemButton.setId("viewButton");
 
         //When the View Button is clicked a pop up will appear and the user will be able to add to cart from that window
         viewItemButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -483,13 +562,19 @@ public class Main extends Application {
         borderPane.setCenter(cartVBox);
     }
 
-    //Create the cart page when the order has been completed
-    public void createCompleteOrderPage()
+    //Creates a new cart object and updates cart button
+
+    public void clearCart()
     {
         cart = new Cart();
         cartButton.setText("Cart: " + cart.numItems);
         cartVBox.getChildren().clear();
+    }
 
+    //Create the cart page when the order has been completed
+    public void createCompleteOrderPage()
+    {
+        clearCart();
         Label driverLabel = new Label("Your driver is Driver");
 
         cartVBox.getChildren().add(driverLabel);
@@ -508,6 +593,7 @@ public class Main extends Application {
         Label numItemsLabel = new Label("You currently have " + cart.numItems + " items in your cart");
 
         Label restaurantNameLabel = new Label(cart.restaurant.name);
+        restaurantNameLabel.setId("rName");
         Label restaurantAddressLabel = new Label(cart.restaurant.address);
         Label restaurantPhoneLabel = new Label(cart.restaurant.phoneNumber);
 
@@ -515,7 +601,7 @@ public class Main extends Application {
 
         Label totalLabel = new Label("Total Due: $" + String.format("%.2f", cart.totalDue));
 
-        Button checkoutButton = new Button("Continue to Checkout");
+        Button checkoutButton = new Button("Checkout");
         checkoutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -554,7 +640,7 @@ public class Main extends Application {
         Label itemNameLabel = new Label(cartItem.itemName);
         Label itemQuantityLabel = new Label("x" + String.valueOf(cartItem.quantity));
         Label itemPriceLabel = new Label("($" + String.format("%.2f", cartItem.price) + ")");
-        Label itemTotalPriceLabel = new Label("$" + String.valueOf(cartItem.totalPrice));
+        Label itemTotalPriceLabel = new Label("$" + String.format("%.2f", cartItem.totalPrice));
 
         Button editItemButton = new Button("Edit");
         Button deleteItemButton = new Button("Delete");
@@ -587,12 +673,199 @@ public class Main extends Application {
     //Popup Windows
     //============================================================================================
 
+    //Create Sign Up Popup
+    public void createSignUpPopup()
+    {
+
+        Label signUpLabel = new Label("Sign Up");
+        signUpLabel.setId("nameLabel");
+
+        //Page 1
+        Label emailLabel = new Label("Email: ");
+        Label passwordLabel = new Label("Password: ");
+        Label phoneLabel = new Label("Phone#: ");
+        Label addressLabel = new Label("Address: ");
+
+        Label error1Label = new Label("Required field!");
+        Label error2Label = new Label("Required field!");
+        Label error3Label = new Label("Required field!");
+        Label error4Label = new Label("Required field!");
+
+        //Page 2
+        Label creditCardLabel = new Label("Credit Card: " );
+        Label expirationDateLabel = new Label("Expiration Date: ");
+        Label cardHolderLabel = new Label("Cardholder: ");
+        Label cvvLabel = new Label("CVV: ");
+        Label cardAddressLabel = new Label("Billing Address: ");
+        Label cityLabel = new Label("City: ");
+        Label stateLabel = new Label("State: ");
+        Label zipLabel = new Label("Zip: ");
+
+
+        Label error5Label = new Label("Required field!");
+        Label error6Label = new Label("Required field!");
+        Label error7Label = new Label("Required field!");
+        Label error8Label = new Label("Required field!");
+        Label error9Label = new Label("Required field!");
+        Label error10Label = new Label("Required field!");
+        Label error11Label = new Label("Required field!");
+        Label error12Label = new Label("Required field!");
+
+        Label[] labels1 = new Label[]{error1Label, error2Label, error3Label, error4Label};
+
+        Label[] labels2 = new Label[]{error5Label, error6Label, error7Label, error8Label, error9Label, error10Label, error11Label, error12Label};
+
+        for (Label label : labels1)
+        {
+            label.setVisible(false);
+            label.setId("errorLabel");
+        }
+
+        for (Label label : labels2)
+        {
+            label.setVisible(false);
+            label.setId("errorLabel");
+        }
+
+        TextField emailText = new TextField();
+        PasswordField passwordText = new PasswordField();
+        TextField phoneText = new TextField();
+        TextField addressText = new TextField();
+
+        TextField creditCardText = new TextField();
+        TextField expirationDateText = new TextField();
+        TextField cardHolderText = new TextField();
+        TextField cvvText = new TextField();
+
+        TextField cardAddressText = new TextField();
+        TextField cityText = new TextField();
+        TextField stateText = new TextField();
+        TextField zipText = new TextField();
+
+        //Sign up GridPane
+        GridPane signUpGP = new GridPane();
+        signUpGP.setAlignment(Pos.CENTER);
+        signUpGP.setHgap(10);
+        signUpGP.setVgap(10);
+
+        signUpGP.add(emailLabel, 0, 0);
+        signUpGP.add(emailText, 1, 0);
+        signUpGP.add(error1Label, 2, 0);
+
+        signUpGP.add(passwordLabel, 0, 1);
+        signUpGP.add(passwordText, 1, 1);
+        signUpGP.add(error2Label, 2, 1);
+
+        signUpGP.add(phoneLabel, 0, 2);
+        signUpGP.add(phoneText, 1, 2);
+        signUpGP.add(error3Label, 2, 2);
+
+        signUpGP.add(addressLabel, 0, 3);
+        signUpGP.add(addressText, 1, 3);
+        signUpGP.add(error4Label, 2, 3);
+
+        GridPane cardInfoGP = new GridPane();
+        cardInfoGP.setAlignment(Pos.CENTER);
+        cardInfoGP.setHgap(10);
+        cardInfoGP.setVgap(10);
+
+        cardInfoGP.add(creditCardLabel, 0, 0);
+        cardInfoGP.add(creditCardText, 1, 0);
+        cardInfoGP.add(error5Label, 2, 0);
+
+        cardInfoGP.add(expirationDateLabel, 0, 1);
+        cardInfoGP.add(expirationDateText, 1, 1);
+        cardInfoGP.add(error6Label, 2, 1);
+
+        cardInfoGP.add(cardHolderLabel, 0, 2);
+        cardInfoGP.add(cardHolderText, 1, 2);
+        cardInfoGP.add(error7Label, 2, 2);
+
+        cardInfoGP.add(cvvLabel, 0, 3);
+        cardInfoGP.add(cvvText, 1, 3);
+        cardInfoGP.add(error8Label, 2, 3);
+
+        cardInfoGP.add(cardAddressLabel, 0, 4);
+        cardInfoGP.add(cardAddressText, 1, 4);
+        cardInfoGP.add(error9Label, 2, 4);
+
+        cardInfoGP.add(cityLabel, 0, 5);
+        cardInfoGP.add(cityText, 1, 5);
+        cardInfoGP.add(error10Label, 2, 5);
+
+        cardInfoGP.add(stateLabel, 0, 6);
+        cardInfoGP.add(stateText, 1, 6);
+        cardInfoGP.add(error11Label, 2, 6);
+
+        cardInfoGP.add(zipLabel, 0, 7);
+        cardInfoGP.add(zipText, 1, 7);
+        cardInfoGP.add(error12Label, 2, 7);
+
+        //leads to credit card info
+        Button continueButton = new Button("Continue");
+
+        //leads to home
+        Button submitButton = new Button("Submit");
+
+        //Sign Up VBox
+        VBox signUpVBox = new VBox(10, signUpGP, continueButton);
+        signUpVBox.setAlignment(Pos.CENTER);
+
+        VBox labelVBox = new VBox(signUpLabel);
+        labelVBox.setAlignment(Pos.CENTER);
+        labelVBox.setId("labelVBox");
+
+        BorderPane bp = new BorderPane();
+        bp.setTop(labelVBox);
+        bp.setCenter(signUpVBox);
+
+        Stage signUpStage = new Stage();
+
+        continueButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String[] data = new String[]{emailText.getText(), passwordText.getText(), phoneText.getText(), addressText.getText()};
+                if(validateForm(data, labels1)) {
+                    signUpVBox.getChildren().clear();
+                    signUpVBox.getChildren().addAll(cardInfoGP, submitButton);
+                }
+            }
+        });
+
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) { //cardID, expirationDate, cardholderName, cvvNum, address, city, state, zip
+                String[] data = new String[]{creditCardText.getText(), expirationDateText.getText(), cardHolderText.getText(), cvvText.getText(), cardAddressText.getText(), cityText.getText(), stateText.getText(), zipText.getText()};
+                //System.out.println("Num labels: " + data.length);
+                if(validateForm(data, labels2)) {
+                    borderPane.setTop(createNavBar());
+                    createHomePage();
+                    signUpStage.close();
+                }
+            }
+        });
+
+        Scene signUpScene = new Scene(bp, 400, 400);
+
+        signUpScene.getStylesheets().add("style.css");
+        signUpStage.setScene(signUpScene);
+        signUpStage.show();
+    }
+
     //Creates the view item page, users select the quantity of the item and add it to cart
     public void createViewPopup(Restaurant restaurant, RestaurantMenuItem rmi)
     {
-        Stage itemStage = new Stage();
+        Label restaurantNameLabel = new Label(restaurant.name);
+        restaurantNameLabel.setId("nameLabel");
+
+        VBox labelVBox = new VBox(restaurantNameLabel);
+        labelVBox.setAlignment(Pos.CENTER);
+        labelVBox.setId("labelVBox");
+
+        Stage viewItemStage = new Stage();
         final int[] itemQuantity = {1};
         Label itemNameLabelPopUp = new Label(rmi.itemName);
+        itemNameLabelPopUp.setId("itemName");
         Label itemDescriptionLabelPopUp = new Label(rmi.description);
         Label totalItemPriceLabel = new Label("$" + String.format("%.2f", rmi.price));
         Label quantityLabel = new Label("Quantity: ");
@@ -600,7 +873,9 @@ public class Main extends Application {
         TextField quantityData = new TextField(String.valueOf(itemQuantity[0]));
 
         Button increaseButton = new Button("+");
+        increaseButton.setId("qButton");
         Button decreaseButton = new Button("-");
+        decreaseButton.setId("qButton");
         Button addButton = new Button("Add");
 
         //Handles user input from textfield
@@ -669,7 +944,7 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 addItemToCart(itemQuantity[0], restaurant, rmi);
 
-                itemStage.close();
+                viewItemStage.close();
             }
         });
 
@@ -678,17 +953,30 @@ public class Main extends Application {
 
         VBox itemVBox = new VBox(10, itemNameLabelPopUp, itemDescriptionLabelPopUp, totalItemPriceLabel, quantityHBox, addButton);
         itemVBox.setAlignment(Pos.CENTER);
-        Scene itemScene = new Scene(itemVBox, 350, 300);
 
-        itemStage.setScene(itemScene);
-        itemStage.show();
+        BorderPane bp = new BorderPane();
+        bp.setTop(labelVBox);
+        bp.setCenter(itemVBox);
+
+        Scene itemScene = new Scene(bp, 350, 300);
+
+        itemScene.getStylesheets().add("style.css");
+        viewItemStage.setScene(itemScene);
+        viewItemStage.show();
     }
 
     //Creates the edit item page, users can edit the quantity of the item they've added to the cart
     public void createEditPopup(CartItem cartItem)
     {
+        Label editNameLabel = new Label("Edit");
+        editNameLabel.setId("nameLabel");
+
+        VBox labelVBox = new VBox(editNameLabel);
+        labelVBox.setAlignment(Pos.CENTER);
+        labelVBox.setId("labelVBox");
+
         final int[] tempQuantity = {cartItem.quantity};
-        Stage itemStage = new Stage();
+        Stage editItemStage = new Stage();
         Label itemNameLabelPopUp = new Label(cartItem.itemName);
         Label totalItemPriceLabel = new Label("$" + String.format("%.2f", cartItem.totalPrice));
         Label quantityLabel = new Label("Quantity: ");
@@ -696,7 +984,9 @@ public class Main extends Application {
         TextField quantityData = new TextField(String.valueOf(cartItem.quantity));
 
         Button increaseButton = new Button("+");
+        increaseButton.setId("qButton");
         Button decreaseButton = new Button("-");
+        decreaseButton.setId("qButton");
         Button saveButton = new Button("Save");
 
         quantityData.textProperty().addListener((observable, oldValue, newValue )->
@@ -774,7 +1064,7 @@ public class Main extends Application {
                 cart.totalDue += cartItem.totalPrice;
 
                 createCartPage();
-                itemStage.close();
+                editItemStage.close();
             }
         });
 
@@ -783,27 +1073,41 @@ public class Main extends Application {
 
         VBox itemVBox = new VBox(10, itemNameLabelPopUp, totalItemPriceLabel, quantityHBox, saveButton);
         itemVBox.setAlignment(Pos.CENTER);
-        Scene itemScene = new Scene(itemVBox, 350, 300);
 
-        itemStage.setScene(itemScene);
-        itemStage.show();
+        BorderPane bp = new BorderPane();
+        bp.setTop(labelVBox);
+        bp.setCenter(itemVBox);
+
+        Scene itemScene = new Scene(bp, 350, 300);
+
+        itemScene.getStylesheets().add("style.css");
+        editItemStage.setScene(itemScene);
+        editItemStage.show();
     }
 
     //Create the Payment Confirmation Popup
     public void createPaymentPopup()
     {
-        Stage itemStage = new Stage();
+        Label checkoutNameLabel = new Label("Checkout");
+        checkoutNameLabel.setId("nameLabel");
+
+        VBox labelVBox = new VBox(checkoutNameLabel);
+        labelVBox.setAlignment(Pos.CENTER);
+        labelVBox.setId("labelVBox");
+
+        Stage paymentStage = new Stage();
 
         Label customerNameLabel = new Label("Name: ");
-        Label creditCardLabel = new Label("Credit Card: ");
-        Label totalLabel = new Label("Your total is: $" + cart.totalDue);
+        Label creditCard = new Label("Credit Card: ");
+        Label totalLabel = new Label("Your total is: $" + String.format("%.2f", cart.totalDue));
         Label cvvLabel = new Label("CVV: ");
         TextField cvvText = new TextField();
 
         HBox cvvHBox = new HBox(10, cvvLabel, cvvText);
         cvvHBox.setAlignment(Pos.CENTER);
 
-        Button orderButton = new Button("Complete Order");
+        Button orderButton = new Button("Place Order");
+        orderButton.setId("orderButton");
         orderButton.setDisable(true);
 
         cvvText.textProperty().addListener((observable, oldValue, newValue )->
@@ -832,15 +1136,21 @@ public class Main extends Application {
                 //Order needs to be added to profile
                 //=================================
                 createCompleteOrderPage();
-                itemStage.close();
+                paymentStage.close();
             }
         });
 
-        VBox checkoutVBox = new VBox(10, customerNameLabel, creditCardLabel, totalLabel, cvvHBox, orderButton);
+        VBox checkoutVBox = new VBox(10, customerNameLabel, creditCard, totalLabel, cvvHBox, orderButton);
         checkoutVBox.setAlignment(Pos.CENTER);
-        Scene itemScene = new Scene(checkoutVBox, 350, 300);
 
-        itemStage.setScene(itemScene);
-        itemStage.show();
+        BorderPane bp = new BorderPane();
+        bp.setTop(labelVBox);
+        bp.setCenter(checkoutVBox);
+
+        Scene itemScene = new Scene(bp, 350, 300);
+
+        itemScene.getStylesheets().add("style.css");
+        paymentStage.setScene(itemScene);
+        paymentStage.show();
     }
 }
