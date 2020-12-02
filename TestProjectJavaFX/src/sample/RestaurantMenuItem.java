@@ -6,6 +6,7 @@ public class RestaurantMenuItem
     String description;
     double price;
     String restaurantID;
+    int itemID;
 
     RestaurantMenuItem(String itemName, String description, double price)
     {
@@ -13,12 +14,13 @@ public class RestaurantMenuItem
         this.description = description;
         this.price = price;
     }
-    
-    RestaurantMenuItem(String itemName, String description, double price, String restaurantID)
+   
+    RestaurantMenuItem(String itemName, String description, double price, String restaurantID, int itemID)                 
     {
         this.itemName = itemName;
         this.description = description;
         this.price = price;
         this.restaurantID = restaurantID;
+        this.itemID = itemID
     }
 }

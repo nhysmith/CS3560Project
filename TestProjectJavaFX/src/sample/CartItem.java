@@ -5,7 +5,7 @@ public class CartItem {
     int quantity;
     double price;
     double totalPrice;
-    String menuItemID;
+    int itemID;
 
     CartItem(String itemName, int quantity, double price)
     {
@@ -13,5 +13,14 @@ public class CartItem {
         this.quantity = quantity;
         this. price = price;
         this.totalPrice = quantity*price;
+    }
+
+    CartItem(String itemName, int quantity, double price, int itemID)
+    {
+        this.itemName = itemName;
+        this.quantity = quantity;
+        this. price = price;
+        this.totalPrice = quantity*price;
+        this.itemID = itemID
     }
 }

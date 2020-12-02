@@ -1,0 +1,88 @@
+.root
+{
+    -fx-background-color: white;
+}
+
+.button
+{
+    -fx-pref-width: 75px;
+    -fx-background-color: #f28500;
+    -fx-text-fill: white;
+    -fx-text-weight: bold;
+}
+
+#navButton
+{
+    -fx-background-color: transparent;
+}
+
+#errorLabel
+{
+    -fx-text-fill: red;
+    -fx-font-weight: bold;
+}
+
+#nameLabel
+{
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-align: center;
+}
+
+#labelVBox
+{
+     -fx-background-color: #f28500;
+}
+
+#itemName
+{
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+#rName
+{
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+#titleLabel
+{   -fx-text-fill: #f28500;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-text-align: center;
+}
+
+#popRest
+{
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+#searchResult
+{
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+#navBar
+{
+    -fx-background-color: #f28500;
+}
+
+#qButton
+{
+    -fx-pref-width: 40px;
+}
+
+#orderButton
+{
+    -fx-pref-width: 80px;
+}
+
+#viewButton
+{
+    -fx-pref-width: 55px;
+}
+
