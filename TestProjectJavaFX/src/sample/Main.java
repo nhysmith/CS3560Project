@@ -20,6 +20,8 @@ import DaeYoungsBackEnd.ShoppingCart;
 import DaeYoungsBackEnd.Menu;
 import DaeYoungsBackEnd.Item;
 import DaeYoungsBackEnd.Driver;
+import DaeYoungsBackEnd.CreditCard;
+import DaeYoungsBackEnd.RestaurantBE
 
 public class Main extends Application {
     
@@ -28,6 +30,7 @@ public class Main extends Application {
     ShoppingCart currentCart = new ShoppingCart();
     Menu currentMenu = new Menu();
     Driver currentDriver = new Driver();
+    CreditCard currentCredit = new CreditCard();
     
     
     AccessConnection ac = new AccessConnection();
@@ -194,6 +197,7 @@ public class Main extends Application {
                 emailErrorLabel.setVisible(false);
                 passwordErrorLabel.setVisible(false);
                 currentCart.createCart(c,currentCustomer.getCustomerID())
+                //TODO: set creditcard here maybe?
                 return true;
                 
             }
@@ -294,8 +298,11 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 if(!searchText.getText().isEmpty())
                 {
+                    ArrayList<RestaurantBE> searchResults = new ArrayList<RestaurantBE>();
                     //========================
                     //searchText.getText() needs to be queried
+                    searchResults.add(new Restaurant());
+                    searchResults = searchResults[0].searchRestaurant(c, searchText.getText())
                     //========================
                     createSearchPage();
                     searchErrorLabel.setVisible(false);
@@ -314,7 +321,7 @@ public class Main extends Application {
     }
 
     //Create the search page after the search button is pressed
-    public void createSearchPage()
+    public void createSearchPage(ArrayList<RestaurantBE> searchResults)
     {
         //=========================================
         //Probably needs a search results parameter
@@ -322,11 +329,26 @@ public class Main extends Application {
         //VBox searchVBox = new VBox(10,createSearchBar(), createPopularRestaurantVBox());
 
         //An example of what a search result will look like
-        VBox searchVBox = new VBox(10,createSearchBar(), createRestaurantHBox(r1), createPopularRestaurantVBox());
-        searchVBox.setAlignment(Pos.CENTER);
+        //VBox searchVBox = new VBox(10,createSearchBar(), createRestaurantHBox(r1), createPopularRestaurantVBox());
+        //searchVBox.setAlignment(Pos.CENTER);
 
         //=============================
         //For each search result createRestaurantHBox
+        HBox[searchResults.size()] restaurantHBoxArray;
+        for(RestaurantBE j : searchResults)
+        {
+            x = 0;
+            Restaurant result = new Restaurant();
+            result.name = j.getName();
+            result.address = j.getAddress();
+            result.phoneNumber = j.getPhoneNumber();
+            result.restaurantID = j.getRestaurantID();
+            restaurantHBoxArray[x] = createRestaurantHBox(result);
+            x++;
+        } //This should create a list of restaurant hboxes with the info needed. The items are gotten when they click on the restaurant.
+        
+        VBox searchVBox = new VBox(10,createSearchBar(), restaurantHBoxArray, createPopularRestaurantVBox());
+        searchVBox.setAlignment(Pos.CENTER);
         //==============================
 
         borderPane.setCenter(searchVBox);
